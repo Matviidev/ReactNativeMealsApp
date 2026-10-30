@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/meal-detail/:mealId", "destination": "/meal-detail/[mealId].html" },
-    { "source": "/meals-overview/:categoryId", "destination": "/meals-overview/[categoryId].html" }
+    { "source": "/meal-detail/:mealId", "destination": "/meal-detail/%5BmealId%5D" },
+    { "source": "/meals-overview/:categoryId", "destination": "/meals-overview/%5BcategoryId%5D" }
   ]
 }
