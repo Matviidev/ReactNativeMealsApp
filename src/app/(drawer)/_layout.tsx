@@ -1,16 +1,14 @@
 import { Drawer } from "expo-router/drawer";
 import { SymbolView } from "expo-symbols";
 
+import { headerOptions } from "@/constants/navigation";
 import { Colors } from "@/constants/theme";
 
 export default function DrawerLayout() {
   return (
     <Drawer
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.header },
-        headerTintColor: Colors.text,
-        headerTitleStyle: { fontWeight: "700" },
-        headerShadowVisible: false,
+        ...headerOptions,
         sceneStyle: { backgroundColor: Colors.background },
         drawerStyle: { backgroundColor: Colors.header },
         drawerLabelStyle: { fontWeight: "600" },

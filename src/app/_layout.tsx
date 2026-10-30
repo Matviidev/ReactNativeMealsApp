@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Provider } from "react-redux";
 
+import { headerOptions } from "@/constants/navigation";
 import { Colors } from "@/constants/theme";
 import { store } from "@/store/store";
 
@@ -11,10 +12,7 @@ export default function RootLayout() {
       <StatusBar style="light" />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: Colors.header },
-          headerTintColor: Colors.text,
-          headerTitleStyle: { fontWeight: "700" },
-          headerShadowVisible: false,
+          ...headerOptions,
           headerBackButtonDisplayMode: "minimal",
           contentStyle: { backgroundColor: Colors.background },
         }}
