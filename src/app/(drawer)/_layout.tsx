@@ -1,53 +1,29 @@
 import { Drawer } from "expo-router/drawer";
-import { SymbolView } from "expo-symbols";
 
+import { DrawerContent } from "@/components/navigation/drawer-content";
 import { headerOptions } from "@/constants/navigation";
-import { Colors } from "@/constants/theme";
+import { Colors, Layout } from "@/constants/theme";
+import { useLayout } from "@/hooks/use-layout";
 
 export default function DrawerLayout() {
+  const { isDesktop } = useLayout();
+
   return (
     <Drawer
+      drawerContent={(props) => <DrawerContent {...props} />}
       screenOptions={{
         ...headerOptions,
+        headerLeft: isDesktop ? () => null : undefined,
+        swipeEnabled: !isDesktop,
         sceneStyle: { backgroundColor: Colors.background },
-        drawerStyle: { backgroundColor: Colors.header },
-        drawerLabelStyle: { fontWeight: "600" },
-        drawerInactiveTintColor: Colors.text,
-        drawerActiveTintColor: Colors.onPrimary,
-        drawerActiveBackgroundColor: Colors.primary,
+        drawerStyle: [
+          { width: Layout.sidebarWidth, backgroundColor: Colors.header },
+          isDesktop && { display: "none" },
+        ],
       }}
     >
-      <Drawer.Screen
-        name="index"
-        options={{
-          title: "All Categories",
-          drawerLabel: "Categories",
-          drawerIcon: ({ color, size }) => (
-            <SymbolView
-              name={{
-                ios: "square.grid.2x2",
-                android: "grid_view",
-                web: "grid_view",
-              }}
-              tintColor={color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="favorites"
-        options={{
-          title: "Favorites",
-          drawerIcon: ({ color, size }) => (
-            <SymbolView
-              name={{ ios: "star.fill", android: "star", web: "star" }}
-              tintColor={color}
-              size={size}
-            />
-          ),
-        }}
-      />
+      <Drawer.Screen name="index" options={{ title: "All Categories" }} />
+      <Drawer.Screen name="favorites" options={{ title: "Favorites" }} />
     </Drawer>
   );
 }

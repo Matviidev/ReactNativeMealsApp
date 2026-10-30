@@ -21,7 +21,10 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "name": "Meals",
+      "backgroundColor": "#120d0a",
+      "themeColor": "#120d0a"
     },
     "plugins": [
       "expo-router",
@@ -38,6 +41,6 @@
       "typedRoutes": true,
       "reactCompiler": true
     },
-    "backgroundColor": "#24170f"
+    "backgroundColor": "#120d0a"
   }
 }
