@@ -1,0 +1,10 @@
+{
+  "framework": null,
+  "buildCommand": "npx expo export -p web",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/meal-detail/:mealId", "destination": "/meal-detail/[mealId].html" },
+    { "source": "/meals-overview/:categoryId", "destination": "/meals-overview/[categoryId].html" }
+  ]
+}
