@@ -1,7 +1,7 @@
 import { SymbolView, SymbolViewProps } from "expo-symbols";
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
-import { Colors, FontSize, Radius, Spacing } from "@/constants/theme";
+import { Colors, Fonts, FontSize, Radius, Spacing } from "@/constants/theme";
 import { Affordability, Complexity, Meal } from "@/types/meal";
 
 type MealDetailsProps = {
@@ -64,21 +64,22 @@ const styles = StyleSheet.create({
   details: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
     gap: Spacing.sm,
   },
   chip: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.xs,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.sm + Spacing.xs,
+    paddingVertical: Spacing.xs + 2,
     borderRadius: Radius.pill,
+    borderWidth: 1,
+    borderColor: Colors.border,
     backgroundColor: Colors.surfaceElevated,
   },
   chipText: {
+    fontFamily: Fonts.medium,
     fontSize: FontSize.xs,
-    fontWeight: "600",
-    color: Colors.text,
+    color: Colors.textMuted,
   },
 });

@@ -1,30 +1,30 @@
 import { ReactElement } from "react";
-import { FlatList, StyleSheet } from "react-native";
 
+import { Grid } from "@/components/grid";
 import { MealItem } from "@/components/meals-list/meal-item";
-import { Spacing } from "@/constants/theme";
+import { useGridColumns } from "@/hooks/use-layout";
 import { Meal } from "@/types/meal";
 
 type MealsListProps = {
   meals: Meal[];
+  header?: ReactElement;
   emptyState?: ReactElement;
 };
 
-export function MealsList({ meals, emptyState }: MealsListProps) {
+const MIN_CARD_WIDTH = 320;
+const MAX_COLUMNS = 3;
+
+export function MealsList({ meals, header, emptyState }: MealsListProps) {
+  const columns = useGridColumns(MIN_CARD_WIDTH, MAX_COLUMNS);
+
   return (
-    <FlatList
+    <Grid
       data={meals}
+      columns={columns}
       keyExtractor={(meal) => meal.id}
-      renderItem={({ item }) => <MealItem meal={item} />}
-      contentContainerStyle={styles.content}
-      ListEmptyComponent={emptyState}
+      renderItem={(meal) => <MealItem meal={meal} />}
+      header={meals.length > 0 ? header : undefined}
+      emptyState={emptyState}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  content: {
-    flexGrow: 1,
-    padding: Spacing.lg,
-  },
-});
