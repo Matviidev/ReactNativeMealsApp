@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { Colors, FontSize, Radius, Spacing } from "@/constants/theme";
+import { Colors, Fonts, FontSize, Radius, Spacing } from "@/constants/theme";
 import { Meal } from "@/types/meal";
 
 type DietaryFlag = keyof Pick<
@@ -43,19 +43,17 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
     gap: Spacing.sm,
   },
   badge: {
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
+    paddingVertical: Spacing.xs + 2,
     borderRadius: Radius.pill,
-    borderWidth: 1,
-    borderColor: Colors.primary,
+    backgroundColor: Colors.primaryMuted,
   },
   badgeText: {
+    fontFamily: Fonts.semibold,
     fontSize: FontSize.xs,
-    fontWeight: "600",
     color: Colors.primary,
   },
 });

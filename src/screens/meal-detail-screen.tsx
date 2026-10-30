@@ -3,79 +3,126 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { EmptyState } from "@/components/empty-state";
+import { FavoriteButton } from "@/components/favorite-button";
 import { IconButton } from "@/components/icon-button";
 import { DietaryBadges } from "@/components/meal-detail/dietary-badges";
 import { List } from "@/components/meal-detail/list";
-import { Subtitle } from "@/components/meal-detail/subtitle";
+import { Section } from "@/components/meal-detail/section";
 import { MealDetails } from "@/components/meal-details";
-import { Colors, FontSize, Spacing } from "@/constants/theme";
-import { getMealById } from "@/data/queries";
+import { PageTitle } from "@/components/page-title";
+import { FAVORITE_ICON, NOT_FAVORITE_ICON } from "@/constants/icons";
+import {
+  Colors,
+  Fonts,
+  FontSize,
+  Layout,
+  Radius,
+  Spacing,
+} from "@/constants/theme";
+import { getCategoriesByIds, getMealById } from "@/data/queries";
+import { useLayout } from "@/hooks/use-layout";
 import { selectIsFavorite, toggleFavorite } from "@/store/favorites-slice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-
-const FAVORITE_ICON = {
-  ios: "star.fill",
-  android: "star",
-  web: "star",
-} as const;
-const NOT_FAVORITE_ICON = {
-  ios: "star",
-  android: "star_border",
-  web: "star_border",
-} as const;
 
 export function MealDetailScreen() {
   const { mealId } = useLocalSearchParams<{ mealId: string }>();
   const dispatch = useAppDispatch();
   const isFavorite = useAppSelector((state) => selectIsFavorite(state, mealId));
+  const { isTablet, isDesktop } = useLayout();
 
   const meal = getMealById(mealId);
 
   if (!meal) {
     return (
-      <EmptyState
-        icon={{
-          ios: "exclamationmark.triangle",
-          android: "error",
-          web: "error",
-        }}
-        title="Meal not found"
-        message="We couldn't find this recipe. It may have been removed."
-      />
+      <>
+        <PageTitle title="Meal not found" />
+        <EmptyState
+          icon={{
+            ios: "exclamationmark.triangle",
+            android: "error",
+            web: "error",
+          }}
+          title="Meal not found"
+          message="We couldn't find this recipe. It may have been removed."
+        />
+      </>
     );
+  }
+
+  const categoryNames = getCategoriesByIds(meal.categoryIds)
+    .map((category) => category.title)
+    .join(" · ");
+
+  function handleToggleFavorite() {
+    dispatch(toggleFavorite(mealId));
   }
 
   return (
     <>
+      <PageTitle title={meal.title} />
       <Stack.Screen
         options={{
-          headerRight: () => (
-            <IconButton
-              icon={isFavorite ? FAVORITE_ICON : NOT_FAVORITE_ICON}
-              color={isFavorite ? Colors.favorite : Colors.text}
-              accessibilityLabel={
-                isFavorite ? "Remove from favorites" : "Add to favorites"
-              }
-              onPress={() => dispatch(toggleFavorite(meal.id))}
-            />
-          ),
+          headerRight: isTablet
+            ? undefined
+            : () => (
+                <IconButton
+                  icon={isFavorite ? FAVORITE_ICON : NOT_FAVORITE_ICON}
+                  color={isFavorite ? Colors.favorite : Colors.text}
+                  accessibilityLabel={
+                    isFavorite ? "Remove from favorites" : "Add to favorites"
+                  }
+                  onPress={handleToggleFavorite}
+                />
+              ),
         }}
       />
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={[styles.content, isTablet && styles.contentWide]}
+      >
         <Image
           source={{ uri: meal.imageUrl }}
-          style={styles.image}
+          style={[styles.image, isTablet && styles.imageWide]}
           contentFit="cover"
           transition={200}
         />
-        <View style={styles.body}>
-          <Text style={styles.title}>{meal.title}</Text>
-          <MealDetails meal={meal} style={styles.details} />
-          <DietaryBadges meal={meal} />
-          <Subtitle>Ingredients</Subtitle>
-          <List items={meal.ingredients} />
-          <Subtitle>Steps</Subtitle>
-          <List items={meal.steps} ordered />
+        <View style={[styles.body, isTablet && styles.bodyWide]}>
+          <View style={[styles.intro, isTablet && styles.introWide]}>
+            <View style={styles.introText}>
+              {categoryNames ? (
+                <Text style={styles.eyebrow}>{categoryNames}</Text>
+              ) : null}
+              <Text
+                accessibilityRole="header"
+                style={[styles.title, isTablet && styles.titleWide]}
+              >
+                {meal.title}
+              </Text>
+              <MealDetails meal={meal} />
+              <DietaryBadges meal={meal} />
+            </View>
+            {isTablet ? (
+              <FavoriteButton
+                isFavorite={isFavorite}
+                onPress={handleToggleFavorite}
+              />
+            ) : null}
+          </View>
+          <View style={[styles.sections, isDesktop && styles.sectionsWide]}>
+            <Section
+              title="Ingredients"
+              meta={`${meal.ingredients.length} items`}
+              style={isDesktop && styles.ingredients}
+            >
+              <List items={meal.ingredients} />
+            </Section>
+            <Section
+              title="Steps"
+              meta={`${meal.steps.length} steps`}
+              style={isDesktop && styles.steps}
+            >
+              <List items={meal.steps} ordered />
+            </Section>
+          </View>
         </View>
       </ScrollView>
     </>
@@ -84,22 +131,75 @@ export function MealDetailScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    paddingBottom: Spacing.xxl,
+    paddingBottom: Spacing.xxxl,
+  },
+  contentWide: {
+    width: "100%",
+    maxWidth: Layout.maxReadableWidth,
+    alignSelf: "center",
+    padding: Spacing.xl,
   },
   image: {
     width: "100%",
-    height: 300,
+    height: 280,
+    backgroundColor: Colors.surfaceElevated,
+  },
+  imageWide: {
+    height: undefined,
+    aspectRatio: 21 / 9,
+    borderRadius: Radius.xl,
   },
   body: {
     padding: Spacing.lg,
+    gap: Spacing.xl,
+  },
+  bodyWide: {
+    paddingHorizontal: 0,
+    paddingTop: Spacing.xl,
+  },
+  intro: {
+    gap: Spacing.lg,
+  },
+  introWide: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+  },
+  introText: {
+    flexShrink: 1,
+    gap: Spacing.md,
+  },
+  eyebrow: {
+    fontFamily: Fonts.semibold,
+    fontSize: FontSize.xs,
+    letterSpacing: 1.2,
+    textTransform: "uppercase",
+    color: Colors.primary,
   },
   title: {
-    fontWeight: "800",
+    fontFamily: Fonts.extrabold,
     fontSize: FontSize.xxl,
-    textAlign: "center",
+    lineHeight: 34,
+    letterSpacing: -0.6,
     color: Colors.text,
   },
-  details: {
-    marginVertical: Spacing.md,
+  titleWide: {
+    fontSize: FontSize.display,
+    lineHeight: 44,
+    letterSpacing: -0.8,
+  },
+  sections: {
+    gap: Spacing.lg,
+  },
+  sectionsWide: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: Spacing.xl,
+  },
+  ingredients: {
+    flex: 2,
+  },
+  steps: {
+    flex: 3,
   },
 });

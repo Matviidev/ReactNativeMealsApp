@@ -7,9 +7,10 @@ A small recipe browsing app built with Expo and React Native. Browse meals by ca
 - Category grid with recipe counts
 - Meal lists per category with duration, complexity and price level
 - Meal details with ingredients, numbered steps and dietary badges
-- Favorites toggled from the meal header, shown in a dedicated drawer screen
+- Favorites toggled from the meal screen, shown in a dedicated screen
 - Empty states for favorites, empty categories and missing meals
-- Drawer and stack navigation with a consistent dark theme
+- Responsive layout: drawer on phones, persistent sidebar and multi-column grids on wide screens
+- Drawer and stack navigation with a consistent dark theme and Inter typography
 
 ## Tech stack
 
@@ -26,7 +27,8 @@ src/
   app/          Routes (Expo Router)
   screens/      Screen components
   components/   Reusable UI
-  constants/    Theme and navigation options
+  constants/    Theme, icons and navigation options
+  hooks/        Responsive layout hooks
   data/         Dummy data and query helpers
   store/        Redux store and favorites slice
   types/        Domain types

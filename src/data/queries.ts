@@ -15,3 +15,7 @@ export function getMealsByCategory(categoryId: string) {
 export function getMealsByIds(mealIds: readonly string[]) {
   return MEALS.filter((meal) => mealIds.includes(meal.id));
 }
+
+export function getCategoriesByIds(categoryIds: readonly string[]) {
+  return CATEGORIES.filter((category) => categoryIds.includes(category.id));
+}

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { Colors, FontSize, Radius, Spacing } from "@/constants/theme";
+import { Colors, Fonts, FontSize, Spacing } from "@/constants/theme";
 
 type ListProps = {
   items: string[];
@@ -9,16 +9,23 @@ type ListProps = {
 
 export function List({ items, ordered = false }: ListProps) {
   return (
-    <View style={styles.list}>
+    <View>
       {items.map((item, index) => (
-        <View key={`${index}-${item}`} style={styles.listItem}>
-          <View style={styles.marker}>
-            {ordered ? (
-              <Text style={styles.markerText}>{index + 1}</Text>
-            ) : (
-              <View style={styles.dot} />
-            )}
-          </View>
+        <View
+          key={`${index}-${item}`}
+          style={[
+            styles.listItem,
+            ordered ? styles.orderedItem : styles.unorderedItem,
+            index > 0 && styles.divider,
+          ]}
+        >
+          {ordered ? (
+            <View style={styles.step}>
+              <Text style={styles.stepText}>{index + 1}</Text>
+            </View>
+          ) : (
+            <View style={styles.dot} />
+          )}
           <Text style={styles.itemText}>{item}</Text>
         </View>
       ))}
@@ -26,44 +33,51 @@ export function List({ items, ordered = false }: ListProps) {
   );
 }
 
-const MARKER_SIZE = 24;
+const STEP_SIZE = 28;
 const DOT_SIZE = 6;
+const LINE_HEIGHT = 24;
 
 const styles = StyleSheet.create({
-  list: {
-    gap: Spacing.sm,
-  },
   listItem: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: Spacing.md,
-    padding: Spacing.md,
-    borderRadius: Radius.md,
-    backgroundColor: Colors.surface,
   },
-  marker: {
-    width: MARKER_SIZE,
-    height: MARKER_SIZE,
-    borderRadius: MARKER_SIZE / 2,
+  unorderedItem: {
+    paddingVertical: Spacing.md,
+  },
+  orderedItem: {
+    paddingVertical: Spacing.lg,
+  },
+  divider: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Colors.borderStrong,
+  },
+  step: {
+    width: STEP_SIZE,
+    height: STEP_SIZE,
+    borderRadius: STEP_SIZE / 2,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryMuted,
   },
-  markerText: {
-    fontSize: FontSize.xs,
-    fontWeight: "700",
-    color: Colors.onPrimary,
+  stepText: {
+    fontFamily: Fonts.bold,
+    fontSize: FontSize.sm,
+    color: Colors.primary,
   },
   dot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
+    marginTop: (LINE_HEIGHT - DOT_SIZE) / 2,
     borderRadius: DOT_SIZE / 2,
-    backgroundColor: Colors.onPrimary,
+    backgroundColor: Colors.primary,
   },
   itemText: {
     flex: 1,
-    fontSize: FontSize.sm,
-    lineHeight: 22,
+    fontFamily: Fonts.regular,
+    fontSize: FontSize.md,
+    lineHeight: LINE_HEIGHT,
     color: Colors.text,
   },
 });
