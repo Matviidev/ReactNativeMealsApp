@@ -17,7 +17,7 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: Colors.background },
         }}
       >
-        <Stack.Screen name="index" options={{ title: "All Categories" }} />
+        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
         <Stack.Screen name="meals-overview/[categoryId]" />
         <Stack.Screen
           name="meal-detail/[mealId]"
