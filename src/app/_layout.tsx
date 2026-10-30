@@ -18,6 +18,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" options={{ title: "All Categories" }} />
+        <Stack.Screen name="meals-overview/[categoryId]" />
       </Stack>
     </>
   );
