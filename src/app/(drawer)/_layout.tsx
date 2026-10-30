@@ -37,6 +37,19 @@ export default function DrawerLayout() {
           ),
         }}
       />
+      <Drawer.Screen
+        name="favorites"
+        options={{
+          title: "Favorites",
+          drawerIcon: ({ color, size }) => (
+            <SymbolView
+              name={{ ios: "star.fill", android: "star", web: "star" }}
+              tintColor={color}
+              size={size}
+            />
+          ),
+        }}
+      />
     </Drawer>
   );
 }
