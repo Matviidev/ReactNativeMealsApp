@@ -1,11 +1,13 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Provider } from "react-redux";
 
 import { Colors } from "@/constants/theme";
+import { store } from "@/store/store";
 
 export default function RootLayout() {
   return (
-    <>
+    <Provider store={store}>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -24,6 +26,6 @@ export default function RootLayout() {
           options={{ title: "About the Meal" }}
         />
       </Stack>
-    </>
+    </Provider>
   );
 }
